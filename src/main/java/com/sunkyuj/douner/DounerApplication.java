@@ -1,4 +1,4 @@
-package com.example.douner;
+package com.sunkyuj.douner;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
