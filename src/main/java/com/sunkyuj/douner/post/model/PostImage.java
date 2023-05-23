@@ -1,6 +1,5 @@
-package com.sunkyuj.douner.domain;
+package com.sunkyuj.douner.post.model;
 
-import com.sunkyuj.douner.domain.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +16,7 @@ public class PostImage {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id") // FK, 연관관계의 주인
     private Post post;
+
     private String imageURL;
 
 }

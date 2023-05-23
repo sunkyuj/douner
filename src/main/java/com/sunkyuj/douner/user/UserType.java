@@ -1,4 +1,4 @@
-package com.sunkyuj.douner.domain;
+package com.sunkyuj.douner.user;
 
 public enum UserType {
     REQUESTER, VOLUNTEER

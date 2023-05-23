@@ -1,8 +1,8 @@
-package com.sunkyuj.douner.domain;
+package com.sunkyuj.douner.chat.model;
 
-import com.sunkyuj.douner.domain.user.Requester;
-import com.sunkyuj.douner.domain.user.User;
-import com.sunkyuj.douner.domain.user.Volunteer;
+import com.sunkyuj.douner.user.model.Requester;
+import com.sunkyuj.douner.user.model.Volunteer;
+import com.sunkyuj.douner.post.model.Post;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

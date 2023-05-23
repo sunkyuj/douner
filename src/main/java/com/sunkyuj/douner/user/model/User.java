@@ -1,8 +1,8 @@
-package com.sunkyuj.douner.domain.user;
+package com.sunkyuj.douner.user.model;
 
-import com.sunkyuj.douner.domain.Location;
-import com.sunkyuj.douner.domain.Post;
-import com.sunkyuj.douner.domain.UserType;
+import com.sunkyuj.douner.location.Location;
+import com.sunkyuj.douner.post.model.Post;
+import com.sunkyuj.douner.user.UserType;
 import jakarta.persistence.*;
 import lombok.*;
 

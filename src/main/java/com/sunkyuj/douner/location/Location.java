@@ -1,4 +1,4 @@
-package com.sunkyuj.douner.domain;
+package com.sunkyuj.douner.location;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;

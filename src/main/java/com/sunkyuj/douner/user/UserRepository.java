@@ -1,6 +1,6 @@
-package com.sunkyuj.douner.repository;
+package com.sunkyuj.douner.user;
 
-import com.sunkyuj.douner.domain.user.User;
+import com.sunkyuj.douner.user.model.User;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -20,6 +20,16 @@ public class UserRepository {
     }
     public List<User> findAll() {
         return em.createQuery("select u from User u", User.class)
+                .getResultList();
+    }
+    public List<User> findAllRequester() {
+        return em.createQuery("select u from User u where u.userType = :userType", User.class)
+                .setParameter("userType", UserType.REQUESTER)
+                .getResultList();
+    }
+    public List<User> findAllVolunteer() {
+        return em.createQuery("select u from User u where u.userType = :userType", User.class)
+                .setParameter("userType", UserType.VOLUNTEER)
                 .getResultList();
     }
     public List<User> findByName(String name) {

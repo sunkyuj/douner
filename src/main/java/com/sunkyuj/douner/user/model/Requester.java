@@ -1,4 +1,4 @@
-package com.sunkyuj.douner.domain.user;
+package com.sunkyuj.douner.user.model;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;

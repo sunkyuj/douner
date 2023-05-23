@@ -1,7 +1,6 @@
-package com.sunkyuj.douner.service;
+package com.sunkyuj.douner.user;
 
-import com.sunkyuj.douner.domain.user.User;
-import com.sunkyuj.douner.repository.UserRepository;
+import com.sunkyuj.douner.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,4 +25,11 @@ public class UserService {
         return userRepository.findOne(id);
     }
 
+    public List<User> findRequesters() {
+        return userRepository.findAllRequester();
+    }
+
+    public List<User> findVolunteers() {
+        return userRepository.findAllVolunteer();
+    }
 }
