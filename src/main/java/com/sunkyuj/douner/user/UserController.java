@@ -1,11 +1,6 @@
 package com.sunkyuj.douner.user;
 
 import com.sunkyuj.douner.user.model.User;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,19 +16,11 @@ public class UserController {
 
     // 나중에 register로 대체
     @PostMapping()
-    public Long addUser(User user){
-        return userService.join(user);
+    public Long addUser(@RequestBody UserDto userDto){
+        return userService.join(userDto);
     }
 
-    @Operation(summary = "전체 회원 조회 요청", description = "전체 회원 정보가 반환됩니다.", tags = { "User Controller" })
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK",
-                    content = @Content(schema = @Schema(implementation = List.class))
-            ),
-            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
-            @ApiResponse(responseCode = "404", description = "NOT FOUND"),
-            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-    })
+
     @GetMapping("")
     public List<User> users() {
         return userService.findUsers();
@@ -50,7 +37,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public User user(@PathVariable Long userId) {
+    public User user(@PathVariable("userId") Long userId) {
         return userService.findOne(userId);
     }
 //

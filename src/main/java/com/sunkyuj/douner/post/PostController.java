@@ -1,6 +1,8 @@
 package com.sunkyuj.douner.post;
 
 import com.sunkyuj.douner.post.model.Post;
+import com.sunkyuj.douner.utils.ApiResult;
+import com.sunkyuj.douner.utils.ApiUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,15 +16,29 @@ public class PostController {
         this.postService = postService;
     }
 
+//    @PostMapping("")
+//    public Long addPost(Post post){
+//        return postService.addPost(post);
+//    }
+
     /*
-    * 게시물 등록
-    * [GET] /posts
-    * @return
-    * */
+     * 게시물 등록
+     * [GET] /posts
+     * @return PostDto
+     * */
     @PostMapping("")
-    public Long addPost(Post post){
-        return postService.addPost(post);
+    public ApiResult<PostDto> addPost(@RequestBody PostDto postDto){
+        postService.addPost(postDto);
+        return ApiUtils.success(postDto);
+
     }
+//    @PostMapping("")
+//    public ApiResult<PostDto> addPost(PostDto postDto){
+//
+//        Long postId = postService.addPost(post);
+//        return ApiUtils.success();
+//
+//    }
 
     /*
      * 전체 게시물 조회
@@ -34,10 +50,11 @@ public class PostController {
     }
 
     /*
-     * 단일 게시물 조회회     *
+     * 단일 게시물 조회
+     *
      * */
     @GetMapping("/{postId}")
-    public Post post(@PathVariable Long postId) {
+    public Post post(@PathVariable("postId") Long postId) {
         return postService.findOne(postId);
     }
 

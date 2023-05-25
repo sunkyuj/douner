@@ -14,7 +14,17 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Long join(User user) {
+    public Long join(UserDto userDto) {
+        User user = User.builder()
+                .name(userDto.getName())
+                .phoneNumber(userDto.getPhoneNumber())
+                .password(userDto.getPassword())
+                .email(userDto.getEmail())
+                .imageURL(userDto.getImageURL())
+                .userType(userDto.getUserType())
+                .location(userDto.getLocation())
+                .build();
+
         userRepository.save(user);
         return user.getId();
     }

@@ -4,8 +4,7 @@ import com.sunkyuj.douner.location.Location;
 import com.sunkyuj.douner.post.PostStatus;
 import com.sunkyuj.douner.user.model.User;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,6 +13,9 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,6 +40,5 @@ public class Post {
     private List<PostImage> chatRooms = new ArrayList<>();
 
     private PostStatus postStatus;
-
 
 }
