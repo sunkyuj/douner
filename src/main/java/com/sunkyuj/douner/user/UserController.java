@@ -1,11 +1,16 @@
 package com.sunkyuj.douner.user;
 
 import com.sunkyuj.douner.user.model.User;
+import com.sunkyuj.douner.utils.ApiResult;
+import com.sunkyuj.douner.utils.ApiUtils;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("/users")
+@RequestMapping("/api/v1/users")
 @RestController
 public class UserController {
     private final UserService userService;
@@ -40,14 +45,13 @@ public class UserController {
     public User user(@PathVariable("userId") Long userId) {
         return userService.findOne(userId);
     }
-//
-//    @PostMapping("/register")
-//    public ResponseEntity<UserRegisterResponse> joinUser(@Valid @RequestBody UserRegisterParam userRegisterParam) {
-//        User res = userService.register(userRegisterParam);
-//        UserRegisterResponse result = new UserRegisterResponse(res.getUserId(), "success");
-//        return new ResponseEntity<>(result, HttpStatus.OK);
-//    }
-//
+
+    @PostMapping("/register")
+    public ApiResult<UserRegisterResponse> joinUser(@Valid @RequestBody UserRegisterRequest userRegisterRequest) {
+        UserRegisterResponse res = userService.register(userRegisterRequest);
+        return ApiUtils.success(res);
+    }
+
 //    @PostMapping("/login")
 //    public ResponseEntity<UserLoginResultToken> loginUser(@Valid @RequestBody UserLoginReqParam userLoginReqParam) {
 //        UserLoginResultToken result = userService.login(userLoginReqParam);

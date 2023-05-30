@@ -5,7 +5,10 @@ import com.sunkyuj.douner.location.Location;
 import com.sunkyuj.douner.post.model.Post;
 import com.sunkyuj.douner.user.UserType;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.springframework.lang.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +18,7 @@ import java.util.List;
 @DiscriminatorColumn(name = "dtype")
 @Getter @Setter
 @Builder
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
@@ -22,16 +26,25 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="user_id")
     private Long id;
+    @NotBlank
     private String name;
+
+    @Nullable
     private String phoneNumber;
 
-    @JsonIgnore
+    @NotBlank
     private String password;
 
+    @NotBlank
     private String email;
+
+    @Nullable
     private String imageURL;
+
+//    @ColumnDefault("VOLUNTEER")
     private UserType userType;
 
+    @Nullable
     @Embedded
     private Location location;
 

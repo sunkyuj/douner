@@ -25,5 +25,5 @@ public class PostDto {
     private Date endTime;
     private Gender preferGender;  // 선호 성별
 //    private List<PostImage> postImages; // 사진 리스트
-
 }
+
