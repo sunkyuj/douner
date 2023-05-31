@@ -6,8 +6,8 @@ import lombok.Getter;
 @Builder
 @Getter
 public class UserLoginResultToken {
-    private Long userIndex;
-    private String userId;
+    private Long userId;
+    private String username;
     private String accessToken;
     private String refreshToken;
 }

@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.lang.Nullable;
 
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ public class User {
     @NotBlank
     private String password;
 
+    // unique
     @NotBlank
     private String email;
 

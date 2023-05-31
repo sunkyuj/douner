@@ -48,13 +48,13 @@ public class UserController {
 
     @PostMapping("/register")
     public ApiResult<UserRegisterResponse> joinUser(@Valid @RequestBody UserRegisterRequest userRegisterRequest) {
-        UserRegisterResponse res = userService.register(userRegisterRequest);
-        return ApiUtils.success(res);
+        UserRegisterResponse result = userService.register(userRegisterRequest);
+        return ApiUtils.success(result);
     }
 
-//    @PostMapping("/login")
-//    public ResponseEntity<UserLoginResultToken> loginUser(@Valid @RequestBody UserLoginReqParam userLoginReqParam) {
-//        UserLoginResultToken result = userService.login(userLoginReqParam);
-//        return new ResponseEntity<>(result, HttpStatus.OK);
-//    }
+    @PostMapping("/login")
+    public ApiResult<UserLoginResultToken> loginUser(@Valid @RequestBody UserLoginRequest userLoginRequest) {
+        UserLoginResultToken result = userService.login(userLoginRequest);
+        return ApiUtils.success(result);
+    }
 }

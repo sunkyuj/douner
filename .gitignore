@@ -1,6 +1,7 @@
 HELP.md
 .gradle
 application.properties
+java/com/sunkyuj/douner/SecurityConstants.java
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
