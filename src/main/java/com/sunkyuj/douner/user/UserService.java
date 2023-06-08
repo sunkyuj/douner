@@ -1,6 +1,5 @@
 package com.sunkyuj.douner.user;
 
-import com.sunkyuj.douner.config.WebSecurityConfig;
 import com.sunkyuj.douner.errors.CustomException;
 import com.sunkyuj.douner.errors.ErrorCode;
 import com.sunkyuj.douner.security.JwtService;
@@ -8,7 +7,6 @@ import com.sunkyuj.douner.security.JwtService;
 import com.sunkyuj.douner.security.LoginToken;
 import com.sunkyuj.douner.user.model.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +34,7 @@ public class UserService {
                 .email(userDto.getEmail())
                 .imageURL(userDto.getImageURL())
                 .userType(userDto.getUserType())
-                .location(userDto.getLocation())
+                .address(userDto.getAddress())
                 .build();
 
         userRepository.save(user);

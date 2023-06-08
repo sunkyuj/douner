@@ -25,7 +25,7 @@ public class PostService {
                 .user(user)
                 .title(postDto.getTitle())
                 .contents(postDto.getContent())
-                .location(postDto.getLocation())
+                .address(postDto.getAddress())
                 .startTime(postDto.getStartTime())
                 .duration(postDto.getDuration())
                 .endTime(postDto.getEndTime())

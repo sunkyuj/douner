@@ -1,4 +1,4 @@
-package com.sunkyuj.douner.location;
+package com.sunkyuj.douner.address;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
@@ -9,8 +9,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Location {
-    private String city;
-    private String street;
-    private String zipcode;
+public class Address {
+    private String addressLine;
+    private double latitude;
+    private double longitude;
+    private String detail;
 }
