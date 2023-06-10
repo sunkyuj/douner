@@ -1,5 +1,6 @@
-package com.sunkyuj.douner.user;
+package com.sunkyuj.douner.user.model;
 
+import com.sunkyuj.douner.user.UserType;
 import com.sunkyuj.douner.user.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

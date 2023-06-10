@@ -1,6 +1,7 @@
 package com.sunkyuj.douner.post;
 
 import com.sunkyuj.douner.post.model.Post;
+import com.sunkyuj.douner.post.model.PostRequest;
 import com.sunkyuj.douner.user.UserRepository;
 import com.sunkyuj.douner.user.model.User;
 import lombok.RequiredArgsConstructor;
@@ -18,18 +19,18 @@ public class PostService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Long addPost(PostDto postDto) {
+    public Long addPost(Long userId, PostRequest postRequest) {
         // 여기에 UserType 체크하는 로직 (Requester 일때만 Post 가능)
-        User user = userRepository.findOne(postDto.getUserId());
+        User user = userRepository.findOne(userId);
         Post post = Post.builder()
                 .user(user)
-                .title(postDto.getTitle())
-                .contents(postDto.getContent())
-                .address(postDto.getAddress())
-                .startTime(postDto.getStartTime())
-                .duration(postDto.getDuration())
-                .endTime(postDto.getEndTime())
-//                .postImages(postDto.getPostImages())
+                .title(postRequest.getTitle())
+                .contents(postRequest.getContent())
+                .address(postRequest.getAddress())
+                .startTime(postRequest.getStartTime())
+//                .duration(postRequest.getDuration())
+                .endTime(postRequest.getEndTime())
+//                .postImages(postRequest.getPostImages())
                 .chatRooms(new ArrayList<>())
                 .postStatus(PostStatus.WAITING)
                 .build();

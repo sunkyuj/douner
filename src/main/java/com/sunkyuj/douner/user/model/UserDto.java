@@ -1,6 +1,7 @@
-package com.sunkyuj.douner.user;
+package com.sunkyuj.douner.user.model;
 
 import com.sunkyuj.douner.address.Address;
+import com.sunkyuj.douner.user.UserType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

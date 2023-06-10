@@ -1,15 +1,16 @@
 package com.sunkyuj.douner.chat.model;
 
-import com.sunkyuj.douner.user.model.Requester;
-import com.sunkyuj.douner.user.model.Volunteer;
+import com.sunkyuj.douner.user.model.User;
 import com.sunkyuj.douner.post.model.Post;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ChatRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,10 +18,10 @@ public class ChatRoom {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    private Requester requester;
+    private User requester;
 
     @OneToOne(fetch = FetchType.LAZY)
-    private Volunteer volunteer;
+    private User volunteer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id") // FK, 연관관계의 주인

@@ -1,11 +1,9 @@
 package com.sunkyuj.douner.user;
 
-import com.sunkyuj.douner.user.model.User;
+import com.sunkyuj.douner.user.model.*;
 import com.sunkyuj.douner.utils.ApiResult;
 import com.sunkyuj.douner.utils.ApiUtils;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,30 +18,34 @@ public class UserController {
     }
 
     // 나중에 register로 대체
-    @PostMapping()
-    public Long addUser(@RequestBody UserDto userDto){
-        return userService.join(userDto);
-    }
+//    @PostMapping()
+//    public Long addUser(@RequestBody UserDto userDto){
+//        return userService.join(userDto);
+//    }
 
 
     @GetMapping("")
-    public List<User> users() {
-        return userService.findUsers();
+    public ApiResult<List<User>> users() {
+        List<User> users = userService.findUsers();
+        return ApiUtils.success(users);
     }
 
     @GetMapping("/requester")
-    public List<User> requester() {
-        return userService.findRequesters();
+    public ApiResult<List<User>> requester() {
+        List<User> users = userService.findRequesters();
+        return ApiUtils.success(users);
     }
 
     @GetMapping("/volunteer")
-    public List<User> volunteer() {
-        return userService.findVolunteers();
+    public ApiResult<List<User>> volunteer() {
+        List<User> users = userService.findVolunteers();
+        return  ApiUtils.success(users);
     }
 
     @GetMapping("/{userId}")
-    public User user(@PathVariable("userId") Long userId) {
-        return userService.findOne(userId);
+    public ApiResult<User> user(@PathVariable("userId") Long userId) {
+        User user = userService.findOne(userId);
+        return ApiUtils.success(user);
     }
 
     @PostMapping("/register")

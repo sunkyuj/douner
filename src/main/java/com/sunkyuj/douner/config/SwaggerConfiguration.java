@@ -17,18 +17,18 @@ public class SwaggerConfiguration {
                 .title("Douner API")
                 .description("사회적 약자를 위한 실시간 도움 서비스 API 명세서");
 
-//        String jwt = "JWT";
-//        SecurityRequirement securityRequirement = new SecurityRequirement().addList(jwt); // 헤더에 토큰 포함
-//        Components components = new Components().addSecuritySchemes(jwt, new SecurityScheme()
-//                .name(jwt)
-//                .type(SecurityScheme.Type.HTTP)
-//                .scheme("bearer")
-//                .bearerFormat("JWT")
-//        );
+        String jwt = "Authorization";
+        SecurityRequirement securityRequirement = new SecurityRequirement().addList(jwt); // 헤더에 토큰 포함
+        Components components = new Components().addSecuritySchemes(jwt, new SecurityScheme()
+                .name(jwt)
+                .type(SecurityScheme.Type.HTTP)
+                .scheme("bearer")
+                .bearerFormat("JWT")
+        );
 
         return new OpenAPI()
-                .info(info);
-//                .addSecurityItem(securityRequirement)
-//                .components(components);
+                .info(info)
+                .addSecurityItem(securityRequirement)
+                .components(components);
     }
 }

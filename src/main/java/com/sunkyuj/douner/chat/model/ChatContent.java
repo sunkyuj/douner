@@ -2,11 +2,15 @@ package com.sunkyuj.douner.chat.model;
 
 import com.sunkyuj.douner.user.model.User;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.Date;
 
 @Entity
 @Getter @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ChatContent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,6 +22,7 @@ public class ChatContent {
 
     @OneToOne(fetch = FetchType.LAZY)
     private User user;
+    private String content;
+    private Date created;
 
-    private String contents;
 }

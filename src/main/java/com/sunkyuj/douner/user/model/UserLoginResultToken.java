@@ -1,4 +1,4 @@
-package com.sunkyuj.douner.user;
+package com.sunkyuj.douner.user.model;
 
 import lombok.Builder;
 import lombok.Getter;

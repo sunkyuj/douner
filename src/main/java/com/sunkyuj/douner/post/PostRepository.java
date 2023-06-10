@@ -9,11 +9,12 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
+
 public class PostRepository {
     private final EntityManager em;
 
-    public void save(Post user) {
-        em.persist(user);
+    public void save(Post post) {
+        em.persist(post);
     }
     public Post findOne(Long id) {
         return em.find(Post.class, id);

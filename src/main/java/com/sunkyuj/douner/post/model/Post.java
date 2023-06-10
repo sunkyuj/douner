@@ -1,6 +1,7 @@
 package com.sunkyuj.douner.post.model;
 
 import com.sunkyuj.douner.address.Address;
+import com.sunkyuj.douner.post.PostCategory;
 import com.sunkyuj.douner.post.PostStatus;
 import com.sunkyuj.douner.user.model.User;
 import jakarta.persistence.*;
@@ -29,6 +30,7 @@ public class Post {
     private String title;
     private String contents;
     private Address address;
+    private PostCategory postCategory;
     private Date startTime;
     private int duration; // data type Duration?
     private Date endTime;

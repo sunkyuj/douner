@@ -1,13 +1,28 @@
 package com.sunkyuj.douner.security;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import static com.sunkyuj.douner.SecurityConstants.JWT_SECRET_KEY;
+import static com.sunkyuj.douner.SecurityConstants.TOKEN_HEADER_PREFIX;
+
+import javax.crypto.SecretKey;
+import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
 public class JwtService {
 
     private final JwtProvider jwtProvider;
+
+    final String INVALID_JWT = "유효하지 않은 토큰입니다.";
+    final String EMPTY_JWT = "토큰이 비어있습니다.";
 
     public LoginToken createToken(Long id) {
         String accessToken = jwtProvider.publishAccessToken(id);
@@ -29,4 +44,67 @@ public class JwtService {
                 .expireSec(jwtProvider.getAccessTokenExpireTime())
                 .build();
     }
+
+    //헤더에서 JWT 추출
+    public String getJwt() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        return request.getHeader("Authorization");
+    }
+
+    // JWT에서 값 추출
+    public Long getUserId() throws Exception {
+        // 헤더에서 JWT 추출
+        String accessToken = getJwt();
+        accessToken = accessToken.replace(TOKEN_HEADER_PREFIX,"");
+        if (accessToken == null || accessToken.length() == 0) {
+            throw new Exception(EMPTY_JWT);
+        }
+
+        // JWT 파싱
+        Claims claims;
+        try {
+            claims = Jwts.parserBuilder()
+                    .setSigningKey(JWT_SECRET_KEY.getBytes())
+                    .build()
+                    .parseClaimsJws(accessToken)
+                    .getBody();
+
+        } catch (Exception ignored) {
+            throw new Exception(INVALID_JWT);
+        }
+
+        // id 추출
+        return claims.get("userId", Long.class);
+    }
+
+    /*
+    JWT에서 exp 추출
+        @return int
+    @throws BaseException
+     */
+    public Date getExp() throws Exception{
+        //1. JWT 추출
+        String accessToken = getJwt();
+        accessToken = accessToken.replace(TOKEN_HEADER_PREFIX,"");
+        System.out.println("accessToken = " + accessToken);
+        if(accessToken == null || accessToken.length() == 0){
+            throw new Exception(EMPTY_JWT);
+        }
+
+        // 2. JWT parsing
+        Claims claims;
+        try{
+            claims = Jwts.parserBuilder()
+                    .setSigningKey(JWT_SECRET_KEY.getBytes())
+                    .build()
+                    .parseClaimsJws(accessToken)
+                    .getBody();
+        } catch (Exception ignored) {
+            throw new Exception(INVALID_JWT);
+        }
+
+        // 3. exp
+        return claims.get("exp",Date.class);
+    }
+
 }
