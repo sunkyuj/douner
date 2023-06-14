@@ -89,18 +89,19 @@ public class UserService {
     public UserLoginResultToken login(UserLoginRequest userLoginRequest) {
         System.out.println(userLoginRequest);
 
-        // 유저 존재 여부 확인
-        List<User> findUsers =userRepository.findByEmail(userLoginRequest.getEmail());
-        if(findUsers.isEmpty()) {
+        // 유저 존재 여부 및 유저타입 확인
+        List<User> findUsers = userRepository.findByEmail(userLoginRequest.getEmail());
+        if(findUsers.isEmpty() || userLoginRequest.getUserType()!=findUsers.get(0).getUserType()) {
             throw new CustomException(ErrorCode.LOGIN_ID_NOT_EXIST);
         }
         User findUser = findUsers.get(0);
+
         // password일치 하는지 여부 확인
         if(!encoder.matches(userLoginRequest.getPassword(),findUser.getPassword())){      // encoder.matches는 암호화된 문자를 입력된 문자와 비교해주는 메서드이다
 //            throw new HospitalReviewAppException(ErrorCode.INVALID_PASSWORD,String.format("비밀번호가 틀립니다."));
             throw new CustomException(ErrorCode.LOGIN_PASSWORD_NOT_EQUAL);
-
         }
+
         LoginToken loginToken = jwtService.createToken(findUser.getId());
 
         return UserLoginResultToken.builder()
