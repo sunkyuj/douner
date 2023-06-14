@@ -8,6 +8,13 @@ import com.sunkyuj.douner.post.model.PostResponse;
 import com.sunkyuj.douner.security.JwtService;
 import com.sunkyuj.douner.utils.ApiResult;
 import com.sunkyuj.douner.utils.ApiUtils;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,16 +30,15 @@ public class PostController {
     private final JwtService jwtService;
 
 
-//    @PostMapping("")
-//    public Long addPost(Post post){
-//        return postService.addPost(post);
-//    }
-
     /*
      * 게시물 등록
      * [GET] /posts
      * @return PostDto
      * */
+    @Operation(summary = "게시물 등록", description = "사용자가 게시물을 등록한다(도움을 요청한다)", tags = { "Post" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Contact.class))))
+    })
     @PostMapping("")
     public ApiResult<Long> addPost(@RequestBody PostRequest postRequest) throws Exception {
         //토큰 유효기간 파악
@@ -56,6 +62,10 @@ public class PostController {
      * 전체 게시물 조회
      *
      * */
+    @Operation(summary = "전체 게시물 조회", description = "모든 게시물(도움)을 조회한다", tags = { "Post" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Contact.class))))
+    })
     @GetMapping("")
     public ApiResult<List<PostResponse>> posts() {
         List<Post> posts = postService.findPosts();
@@ -63,6 +73,7 @@ public class PostController {
 
         for (Post post : posts) {
             PostResponse postResponse = PostResponse.builder()
+                    .postId(post.getId())
                     .userId(post.getUser().getId())
                     .title(post.getTitle())
                     .address(post.getAddress())
@@ -70,6 +81,7 @@ public class PostController {
                     .postCategory(post.getPostCategory())
                     .startTime(post.getStartTime())
                     .endTime(post.getEndTime())
+                    .preferGender(post.getPreferGender())
                     .build();
             postResponseList.add(postResponse);
         }
@@ -81,6 +93,10 @@ public class PostController {
      * 단일 게시물 조회
      *
      * */
+    @Operation(summary = "단일 게시물 조회", description = "한 게시물(도움)을 조회한다", tags = { "Post" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Contact.class))))
+    })
     @GetMapping("/{postId}")
     public ApiResult<PostResponse> post(@PathVariable("postId") Long postId) {
         Post post = postService.findOne(postId);

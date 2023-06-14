@@ -27,6 +27,8 @@ public class PostService {
                 .title(postRequest.getTitle())
                 .contents(postRequest.getContent())
                 .address(postRequest.getAddress())
+                .postCategory(postRequest.getPostCategory())
+                .preferGender(postRequest.getPreferGender())
                 .startTime(postRequest.getStartTime())
 //                .duration(postRequest.getDuration())
                 .endTime(postRequest.getEndTime())

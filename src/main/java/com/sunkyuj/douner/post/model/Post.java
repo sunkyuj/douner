@@ -1,6 +1,7 @@
 package com.sunkyuj.douner.post.model;
 
 import com.sunkyuj.douner.address.Address;
+import com.sunkyuj.douner.common.Gender;
 import com.sunkyuj.douner.post.PostCategory;
 import com.sunkyuj.douner.post.PostStatus;
 import com.sunkyuj.douner.user.model.User;
@@ -34,6 +35,7 @@ public class Post {
     private Date startTime;
     private int duration; // data type Duration?
     private Date endTime;
+    private Gender preferGender;
 
     @OneToMany(mappedBy = "post")
     private List<PostImage> postImages = new ArrayList<>();

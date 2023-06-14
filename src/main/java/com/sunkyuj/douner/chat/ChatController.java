@@ -5,6 +5,13 @@ import com.sunkyuj.douner.errors.CustomException;
 import com.sunkyuj.douner.errors.ErrorCode;
 import com.sunkyuj.douner.security.JwtService;
 import com.sunkyuj.douner.utils.ApiResult;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import com.sunkyuj.douner.utils.ApiUtils;
@@ -37,6 +44,10 @@ public class ChatController {
 //    }
 
     // 한 유저의 채팅방 목록 받기
+    @Operation(summary = "채팅방 목록 조회", description = "사용자의 채팅방 목록을 조회한다", tags = { "Chat" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Contact.class))))
+    })
     @GetMapping("")
     public ApiResult<List<ChatRoomResponse>> findAllChatRoom() throws Exception {
 
@@ -56,7 +67,10 @@ public class ChatController {
     }
 
     // 한 채팅방에서의 모든 채팅 받기
-    @ResponseBody
+    @Operation(summary = "채팅 컨텐츠 조회", description = "채팅방의 컨텐츠를 모두 조회한다", tags = { "Chat" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Contact.class))))
+    })
     @GetMapping("/{chatRoomId}")
     public ApiResult<List<ChatContentResponse>> getAllChatContent(@PathVariable("chatRoomId") Long chatRoomId) throws Exception {
         Long userId = jwtService.getUserId();
@@ -66,7 +80,10 @@ public class ChatController {
 
     // 채팅방 생성
     // 채팅방은 봉사자가 생성하게 됨 (봉사자 -> 사회적약자)
-    @ResponseBody
+    @Operation(summary = "채팅방 생성", description = "봉사자가 해당 게시글에 대해 채팅을 요청하고, 채팅방을 생성한다", tags = { "Chat" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Contact.class))))
+    })
     @PostMapping("/{postId}")
     public ApiResult<ChatRoomResponse> createChatRoom(@PathVariable("postId") Long postId) throws Exception {
         //토큰 유효기간 파악
@@ -87,7 +104,10 @@ public class ChatController {
 
 
     // 채팅컨텐츠(메세지) 생성
-    @ResponseBody
+    @Operation(summary = "채팅컨텐츠 생성", description = "해당 채팅방에 채팅컨텐츠(메세지)를 생성한다", tags = { "Chat" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Contact.class))))
+    })
     @PostMapping("/{chatRoomId}/content")
     public ApiResult<ChatContentResponse> postChatContent(@PathVariable("chatRoomId") Long chatRoomId, @RequestBody ChatContentRequest chatContentRequest) {
         //토큰 유효기간 파악
