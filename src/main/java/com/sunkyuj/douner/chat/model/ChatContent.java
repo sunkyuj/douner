@@ -18,6 +18,7 @@ public class ChatContent {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "chatroom_id") // FK, 연관관계의 주인
     private ChatRoom chatRoom;
 
     @OneToOne(fetch = FetchType.LAZY)

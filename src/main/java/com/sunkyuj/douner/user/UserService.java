@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -40,19 +41,63 @@ public class UserService {
         userRepository.save(user);
         return user.getId();
     }
-    public List<User> findUsers(){
-        return userRepository.findAll();
+    public List<UserResponse> findUsers(){
+        List<User> users = userRepository.findAll();
+        List<UserResponse> userResponses = new ArrayList<>();
+        for(User user:users){
+            userResponses.add(UserResponse.builder()
+                            .name(user.getName())
+                            .phoneNumber(user.getPhoneNumber())
+                            .email(user.getEmail())
+                            .imageURL(user.getImageURL())
+                            .userType(user.getUserType())
+                            .address(user.getAddress())
+                    .build());
+        }
+        return userResponses;
     }
-    public User findOne(Long id){
-        return userRepository.findOne(id);
+    public UserResponse findOne(Long id){
+        User user = userRepository.findOne(id);
+        return UserResponse.builder()
+                .name(user.getName())
+                .phoneNumber(user.getPhoneNumber())
+                .email(user.getEmail())
+                .imageURL(user.getImageURL())
+                .userType(user.getUserType())
+                .address(user.getAddress())
+                .build();
     }
 
-    public List<User> findRequesters() {
-        return userRepository.findAllRequester();
+    public List<UserResponse> findRequesters() {
+        List<User> users = userRepository.findAllRequester();
+        List<UserResponse> userResponses = new ArrayList<>();
+        for(User user:users){
+            userResponses.add(UserResponse.builder()
+                    .name(user.getName())
+                    .phoneNumber(user.getPhoneNumber())
+                    .email(user.getEmail())
+                    .imageURL(user.getImageURL())
+                    .userType(user.getUserType())
+                    .address(user.getAddress())
+                    .build());
+        }
+        return userResponses;
     }
 
-    public List<User> findVolunteers() {
-        return userRepository.findAllVolunteer();
+    public List<UserResponse> findVolunteers() {
+        List<User> users = userRepository.findAllVolunteer();
+        List<UserResponse> userResponses = new ArrayList<>();
+        for(User user:users){
+            userResponses.add(UserResponse.builder()
+                    .name(user.getName())
+                    .phoneNumber(user.getPhoneNumber())
+                    .email(user.getEmail())
+                    .imageURL(user.getImageURL())
+                    .userType(user.getUserType())
+                    .address(user.getAddress())
+                    .build());
+        }
+        return userResponses;
     }
 
     @Transactional

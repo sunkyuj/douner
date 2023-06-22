@@ -37,7 +37,7 @@ public class PostController {
      * */
     @Operation(summary = "게시물 등록", description = "사용자가 게시물을 등록한다(도움을 요청한다)", tags = { "Post" })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Contact.class))))
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Long.class)))
     })
     @PostMapping("")
     public ApiResult<Long> addPost(@RequestBody PostRequest postRequest) throws Exception {
@@ -64,10 +64,10 @@ public class PostController {
      * */
     @Operation(summary = "전체 게시물 조회", description = "모든 게시물(도움)을 조회한다", tags = { "Post" })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Contact.class))))
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = PostResponse.class))))
     })
     @GetMapping("")
-    public ApiResult<List<PostResponse>> posts() {
+    public ApiResult<List<PostResponse>> getPosts() {
         List<Post> posts = postService.findPosts();
         List<PostResponse> postResponseList = new ArrayList<>();
 
@@ -77,7 +77,7 @@ public class PostController {
                     .userId(post.getUser().getId())
                     .title(post.getTitle())
                     .address(post.getAddress())
-                    .content(post.getContents())
+                    .content(post.getContent())
                     .postCategory(post.getPostCategory())
                     .startTime(post.getStartTime())
                     .endTime(post.getEndTime())
@@ -95,21 +95,41 @@ public class PostController {
      * */
     @Operation(summary = "단일 게시물 조회", description = "한 게시물(도움)을 조회한다", tags = { "Post" })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Contact.class))))
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = PostResponse.class)))
     })
     @GetMapping("/{postId}")
-    public ApiResult<PostResponse> post(@PathVariable("postId") Long postId) {
+    public ApiResult<PostResponse> getPost(@PathVariable("postId") Long postId) {
         Post post = postService.findOne(postId);
         PostResponse postResponse = PostResponse.builder()
                 .userId(post.getUser().getId())
                 .title(post.getTitle())
                 .address(post.getAddress())
-                .content(post.getContents())
+                .content(post.getContent())
                 .postCategory(post.getPostCategory())
                 .startTime(post.getStartTime())
                 .endTime(post.getEndTime())
                 .build();
         return ApiUtils.success(postResponse);
+    }
+
+    @Operation(summary = "게시물 수정", description = "게시물을 수정한다", tags = { "Post" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = PostResponse.class)))
+    })
+    @PatchMapping("/{postId}")
+    public ApiResult<Long> updatePost(@PathVariable("postId") Long postId, @RequestBody PostRequest postRequest) {
+        postService.updatePost(postId, postRequest);
+        return ApiUtils.success(200L);
+    }
+
+    @Operation(summary = "게시물 삭제", description = "게시물을 삭제한다", tags = { "Post" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = PostResponse.class)))
+    })
+    @DeleteMapping("/{postId}")
+    public ApiResult<Long> deletePost(@PathVariable("postId") Long postId) {
+        postService.deletePost(postId);
+        return ApiUtils.success(200L);
     }
 
 }

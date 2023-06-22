@@ -1,6 +1,7 @@
 package com.sunkyuj.douner.post.model;
 
 import com.sunkyuj.douner.address.Address;
+import com.sunkyuj.douner.chat.model.ChatRoom;
 import com.sunkyuj.douner.common.Gender;
 import com.sunkyuj.douner.post.PostCategory;
 import com.sunkyuj.douner.post.PostStatus;
@@ -29,7 +30,7 @@ public class Post {
     private User user;
 
     private String title;
-    private String contents;
+    private String content;
     private Address address;
     private PostCategory postCategory;
     private Date startTime;
@@ -40,8 +41,9 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<PostImage> postImages = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post")
-    private List<PostImage> chatRooms = new ArrayList<>();
+    @OneToMany(mappedBy = "post",
+                cascade = CascadeType.ALL)  // 모든 경우에 CASCADE 해서 다 같이 묶여서 처리 (ALL, DELETE, UPDATE 등 있음)
+    private List<ChatRoom> chatRooms = new ArrayList<>();
 
     private PostStatus postStatus;
 

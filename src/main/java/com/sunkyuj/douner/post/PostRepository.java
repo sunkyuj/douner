@@ -29,4 +29,8 @@ public class PostRepository {
                 .setParameter("title", title)
                 .getResultList();
     }
+
+    public void delete(Post post){
+        em.remove(post);
+    }
 }

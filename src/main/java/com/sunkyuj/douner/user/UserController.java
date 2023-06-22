@@ -24,56 +24,49 @@ public class UserController {
         this.userService = userService;
     }
 
-    // 나중에 register로 대체
-//    @PostMapping()
-//    public Long addUser(@RequestBody UserDto userDto){
-//        return userService.join(userDto);
-//    }
-
-
     @Operation(summary = "전체 사용자 조회", description = "모든 사용자를 조회한다", tags = { "User" })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Contact.class))))
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = UserResponse.class))))
     })
     @GetMapping("")
-    public ApiResult<List<User>> users() {
-        List<User> users = userService.findUsers();
+    public ApiResult<List<UserResponse>> users() {
+        List<UserResponse> users = userService.findUsers();
         return ApiUtils.success(users);
     }
 
     @Operation(summary = "요청자 타입의 사용자 조회", description = "모든 요청자를 조회한다", tags = { "User" })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Contact.class))))
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = UserResponse.class))))
     })
     @GetMapping("/requester")
-    public ApiResult<List<User>> requester() {
-        List<User> users = userService.findRequesters();
+    public ApiResult<List<UserResponse>> requester() {
+        List<UserResponse> users = userService.findRequesters();
         return ApiUtils.success(users);
     }
 
     @Operation(summary = "봉사자 타입의 사용자 조회", description = "모든 봉사자를 조회한다", tags = { "User" })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Contact.class))))
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = UserResponse.class))))
     })
     @GetMapping("/volunteer")
-    public ApiResult<List<User>> volunteer() {
-        List<User> users = userService.findVolunteers();
+    public ApiResult<List<UserResponse>> volunteer() {
+        List<UserResponse> users = userService.findVolunteers();
         return  ApiUtils.success(users);
     }
 
     @Operation(summary = "단일 사용자 조회", description = "한 사용자의 정보를 조회한다", tags = { "User" })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Contact.class))))
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = UserResponse.class)))
     })
     @GetMapping("/{userId}")
-    public ApiResult<User> user(@PathVariable("userId") Long userId) {
-        User user = userService.findOne(userId);
+    public ApiResult<UserResponse> user(@PathVariable("userId") Long userId) {
+        UserResponse user = userService.findOne(userId);
         return ApiUtils.success(user);
     }
 
     @Operation(summary = "회원가입", description = "회원을 등록한다", tags = { "User" })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Contact.class))))
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = UserRegisterResponse.class)))
     })
     @PostMapping("/register")
     public ApiResult<UserRegisterResponse> joinUser(@Valid @RequestBody UserRegisterRequest userRegisterRequest) {
@@ -83,7 +76,7 @@ public class UserController {
 
     @Operation(summary = "로그인", description = "로그인을 하여 회원 인증을 한다", tags = { "User" })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Contact.class))))
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = UserLoginResultToken.class)))
     })
     @PostMapping("/login")
     public ApiResult<UserLoginResultToken> loginUser(@Valid @RequestBody UserLoginRequest userLoginRequest) {

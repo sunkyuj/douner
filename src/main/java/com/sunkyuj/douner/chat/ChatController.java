@@ -46,7 +46,7 @@ public class ChatController {
     // 한 유저의 채팅방 목록 받기
     @Operation(summary = "채팅방 목록 조회", description = "사용자의 채팅방 목록을 조회한다", tags = { "Chat" })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Contact.class))))
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ChatRoomResponse.class))))
     })
     @GetMapping("")
     public ApiResult<List<ChatRoomResponse>> findAllChatRoom() throws Exception {
@@ -69,7 +69,7 @@ public class ChatController {
     // 한 채팅방에서의 모든 채팅 받기
     @Operation(summary = "채팅 컨텐츠 조회", description = "채팅방의 컨텐츠를 모두 조회한다", tags = { "Chat" })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Contact.class))))
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ChatContentResponse.class))))
     })
     @GetMapping("/{chatRoomId}")
     public ApiResult<List<ChatContentResponse>> getAllChatContent(@PathVariable("chatRoomId") Long chatRoomId) throws Exception {
@@ -82,7 +82,7 @@ public class ChatController {
     // 채팅방은 봉사자가 생성하게 됨 (봉사자 -> 사회적약자)
     @Operation(summary = "채팅방 생성", description = "봉사자가 해당 게시글에 대해 채팅을 요청하고, 채팅방을 생성한다", tags = { "Chat" })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Contact.class))))
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = ChatRoomResponse.class)))
     })
     @PostMapping("/{postId}")
     public ApiResult<ChatRoomResponse> createChatRoom(@PathVariable("postId") Long postId) throws Exception {
@@ -106,7 +106,7 @@ public class ChatController {
     // 채팅컨텐츠(메세지) 생성
     @Operation(summary = "채팅컨텐츠 생성", description = "해당 채팅방에 채팅컨텐츠(메세지)를 생성한다", tags = { "Chat" })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Contact.class))))
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = ChatContentResponse.class)))
     })
     @PostMapping("/{chatRoomId}/content")
     public ApiResult<ChatContentResponse> postChatContent(@PathVariable("chatRoomId") Long chatRoomId, @RequestBody ChatContentRequest chatContentRequest) {
