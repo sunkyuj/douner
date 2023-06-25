@@ -117,7 +117,19 @@ public class PostController {
             @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = PostResponse.class)))
     })
     @PatchMapping("/{postId}")
-    public ApiResult<Long> updatePost(@PathVariable("postId") Long postId, @RequestBody PostRequest postRequest) {
+    public ApiResult<Long> updatePost(@PathVariable("postId") Long postId, @RequestBody PostRequest postRequest) throws Exception {
+
+        //토큰 유효기간 파악
+        try {
+            Date current = new Date(System.currentTimeMillis());
+            if(current.after(jwtService.getExp())){
+                throw new CustomException(ErrorCode.EXPIRED_ACCESS_TOKEN);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        Long userId = jwtService.getUserId();
         postService.updatePost(postId, postRequest);
         return ApiUtils.success(200L);
     }

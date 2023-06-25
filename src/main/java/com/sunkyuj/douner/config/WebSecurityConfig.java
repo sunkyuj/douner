@@ -1,21 +1,49 @@
 package com.sunkyuj.douner.config;
 
-import jakarta.servlet.DispatcherType;
+import com.sunkyuj.douner.security.JwtAuthenticationFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-    import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
-import static org.springframework.security.config.Customizer.withDefaults;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig {
+
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    private static final String[] PERMIT_URL_ARRAY = {
+            /* swagger v2 */
+            "/v2/api-docs",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/webjars/**",
+            /* swagger v3 */
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "docs/**",
+            /* 로그인, 회원가입 */
+            "/api/v1/users/login",
+            "/api/v1/users/register"
+    };
+
+
+
+    @Bean
+    public BCryptPasswordEncoder encodePwd(){
+        return new BCryptPasswordEncoder();     // password를 인코딩 해줄때 쓰기 위함
+    }
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -33,8 +61,14 @@ public class WebSecurityConfig {
         // authorizeHttpRequests
         httpSecurity
                 .authorizeHttpRequests()
+                .requestMatchers(PERMIT_URL_ARRAY).permitAll()
+                .requestMatchers(HttpMethod.GET,"/api/v1/posts").permitAll()
+//                .requestMatchers(HttpMethod.GET,"/api/v1/chat/**").authenticated()
 //                .requestMatchers("/api/v1/users/**").authenticated()
-                .anyRequest().permitAll()
+                .anyRequest().authenticated()
+                .and()
+
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         ;
 //                .requestMatchers("/swagger-ui/**", "/api/v1/users/register", "/api/v1/users/login").permitAll();
         //      .addFilterBefore(new JwtTokenFilter(userService, secretKey), UsernamePasswordAuthenticationFilter.class)

@@ -2,8 +2,12 @@ package com.sunkyuj.douner.user.model;
 
 import com.sunkyuj.douner.address.Address;
 import com.sunkyuj.douner.user.UserType;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 
+@Getter
+@AllArgsConstructor
 @Builder
 public class UserResponse {
     private String name; // 사용자 이름
