@@ -1,26 +1,28 @@
 package com.sunkyuj.douner.chat;
 
-import com.sunkyuj.douner.chat.model.ChatContent;
-import com.sunkyuj.douner.chat.model.ChatContentResponse;
-import com.sunkyuj.douner.chat.model.ChatRoom;
-import com.sunkyuj.douner.chat.model.ChatRoomResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sunkyuj.douner.chat.model.*;
 import com.sunkyuj.douner.security.JwtService;
 import com.sunkyuj.douner.user.UserRepository;
 
 import com.sunkyuj.douner.user.model.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+import java.util.*;
 
 //Provider : 비즈니스 로직 처리
 @Service
 @Transactional(readOnly = true)
+@Slf4j
 @RequiredArgsConstructor
 public class ChatProvider {
-    private final JwtService jwtService;
+//    private final JwtService jwtService;
     private final ChatRepository chatRepository;
     private final UserRepository userRepository;
 
@@ -53,3 +55,5 @@ public class ChatProvider {
         return chatContentResponseList;
     }
 }
+
+

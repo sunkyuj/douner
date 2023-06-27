@@ -7,6 +7,7 @@ import com.sunkyuj.douner.security.JwtService;
 import com.sunkyuj.douner.security.LoginToken;
 import com.sunkyuj.douner.user.model.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class UserService {
@@ -137,14 +139,17 @@ public class UserService {
         // 유저 존재 여부 및 유저타입 확인
         List<User> findUsers = userRepository.findByEmail(userLoginRequest.getEmail());
         if(findUsers.isEmpty() || userLoginRequest.getUserType()!=findUsers.get(0).getUserType()) {
-            throw new CustomException(ErrorCode.LOGIN_ID_NOT_EXIST);
+            log.error("존재하지 않는 회원, 이메일이나 유저 타입을 확인하세요.");
+            throw new IllegalArgumentException("존재하지 않는 회원, 이메일이나 유저 타입을 확인하세요.");
+//            throw new CustomException(ErrorCode.LOGIN_ID_NOT_EXIST);
         }
         User findUser = findUsers.get(0);
 
         // password일치 하는지 여부 확인
         if(!encoder.matches(userLoginRequest.getPassword(),findUser.getPassword())){      // encoder.matches는 암호화된 문자를 입력된 문자와 비교해주는 메서드이다
-//            throw new HospitalReviewAppException(ErrorCode.INVALID_PASSWORD,String.format("비밀번호가 틀립니다."));
-            throw new CustomException(ErrorCode.LOGIN_PASSWORD_NOT_EQUAL);
+            log.error("비밀번호가 일치하지 않습니다.");
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+//            throw new CustomException(ErrorCode.LOGIN_PASSWORD_NOT_EQUAL);
         }
 
         LoginToken loginToken = jwtService.createToken(findUser.getId());

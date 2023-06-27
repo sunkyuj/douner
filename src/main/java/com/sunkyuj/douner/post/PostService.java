@@ -50,7 +50,6 @@ public class PostService {
     }
 
 
-
     @Transactional
     public void updatePost(Long postId, PostRequest postRequest){
 

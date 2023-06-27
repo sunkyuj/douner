@@ -1,8 +1,10 @@
 package com.sunkyuj.douner.chat;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sunkyuj.douner.chat.model.*;
 import com.sunkyuj.douner.errors.CustomException;
 import com.sunkyuj.douner.errors.ErrorCode;
+import com.sunkyuj.douner.post.PostService;
 import com.sunkyuj.douner.security.JwtService;
 import com.sunkyuj.douner.utils.ApiResult;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,10 +14,13 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.websocket.ContainerProvider;
+import jakarta.websocket.WebSocketContainer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import com.sunkyuj.douner.utils.ApiUtils;
 
+import java.net.URI;
 import java.util.Date;
 import java.util.List;
 
@@ -27,21 +32,8 @@ public class ChatController {
     private final ChatProvider chatProvider;
     private final JwtService jwtService;
 
-//
-//    @ResponseBody
-//    @GetMapping("")
-//    public ApiResult<List<GetChatRoom>> allChatSelect(){
-//        //토큰 유효기간 파악
-//
-//
-//    }
-//
-//
-//    @ResponseBody
-//    @GetMapping("{chatRoomId}")
-//    public ApiResult<List<GetChatContent>> getAllChatContent(@PathVariable("chatRoomId") Long chatRoomId){
-//
-//    }
+    private final PostService postService;
+
 
     // 한 유저의 채팅방 목록 받기
     @Operation(summary = "채팅방 목록 조회", description = "사용자의 채팅방 목록을 조회한다", tags = { "Chat" })
@@ -96,15 +88,19 @@ public class ChatController {
             throw new RuntimeException(e);
         }
 
-        Long volunteerId = jwtService.getUserId();
+        Long volunteerId = jwtService.getUserId(); // 봉사자(봉사자가 채팅 시작)
+        Long requesterId = postService.findOne(postId).getUser().getId(); // 도움요청자(사회적약자)
+        // TODO: 이미 만든 방이 있는지 체크
         ChatRoomResponse chatRoomResponse = chatService.createChatRoom(postId,volunteerId);
+        // 채팅방 생성 후 자동으로 웹소켓 연결시키기
+
         return ApiUtils.success(chatRoomResponse);
     }
 
 
 
-    // 채팅컨텐츠(메세지) 생성
-    @Operation(summary = "채팅컨텐츠 생성", description = "해당 채팅방에 채팅컨텐츠(메세지)를 생성한다", tags = { "Chat" })
+    // 채팅컨텐츠(메세지) 전송
+    @Operation(summary = "채팅컨텐츠(메세지) 전송", description = "채팅컨텐츠(메세지)를 해당 채팅방에 전송한다", tags = { "Chat" })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = ChatContentResponse.class)))
     })
@@ -116,5 +112,4 @@ public class ChatController {
         return ApiUtils.success(chatContentResponse);
 
     }
-
 }

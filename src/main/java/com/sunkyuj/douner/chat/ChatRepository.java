@@ -37,7 +37,4 @@ public class ChatRepository {
         em.persist(chatContent);
         return chatContent.getId();
     }
-
-
-
 }

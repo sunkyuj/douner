@@ -32,9 +32,11 @@ public class WebSecurityConfig {
             "/v3/api-docs/**",
             "/swagger-ui/**",
             "docs/**",
-            /* 로그인, 회원가입 */
+            /* login, register */
             "/api/v1/users/login",
-            "/api/v1/users/register"
+            "/api/v1/users/register",
+            /* web socket */
+            "/ws/chat"
     };
 
 
