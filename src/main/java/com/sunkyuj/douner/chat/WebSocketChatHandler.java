@@ -1,7 +1,7 @@
 package com.sunkyuj.douner.chat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sunkyuj.douner.chat.model.ChatContentDto;
+import com.sunkyuj.douner.chat.model.ChatMessageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -51,7 +51,7 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
         log.info("payload {}", payload);
 
         // 페이로드 -> chatContentDto로 변환
-        ChatContentDto chatContentDto = mapper.readValue(payload, ChatContentDto.class);
+        ChatMessageDto chatContentDto = mapper.readValue(payload, ChatMessageDto.class);
         log.info("session {}", chatContentDto.toString());
 
         Long chatRoomId = chatContentDto.getChatRoomId();
@@ -64,7 +64,7 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
         // message 에 담긴 타입을 확인한다.
         // 이때 message 에서 getType 으로 가져온 내용이
         // ChatDTO 의 열거형인 MessageType 안에 있는 ENTER 과 동일한 값이라면
-        if (chatContentDto.getMessageType().equals(ChatContentDto.MessageType.ENTER)) {
+        if (chatContentDto.getMessageType().equals(ChatMessageDto.MessageType.ENTER)) {
             // sessions 에 넘어온 session 을 담고,
             chatRoomSession.add(session);
         }
@@ -88,7 +88,7 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
         chatRoomSession.removeIf(sess -> !sessions.contains(sess));
     }
 
-    private void sendMessageToChatRoom(ChatContentDto chatContentDto, Set<WebSocketSession> chatRoomSession) {
+    private void sendMessageToChatRoom(ChatMessageDto chatContentDto, Set<WebSocketSession> chatRoomSession) {
         chatRoomSession.parallelStream().forEach(sess -> sendMessageEach(sess, chatContentDto));//2
     }
 

@@ -11,10 +11,10 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatContent {
+public class ChatMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "chat_content_id")
+    @Column(name = "chat_message_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -23,7 +23,7 @@ public class ChatContent {
 
     @OneToOne(fetch = FetchType.LAZY)
     private User user;
-    private String content;
+    private String message;
     private Date created;
 
 }

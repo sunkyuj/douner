@@ -1,21 +1,15 @@
 package com.sunkyuj.douner.chat;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sunkyuj.douner.chat.model.*;
 import com.sunkyuj.douner.post.PostRepository;
 import com.sunkyuj.douner.post.model.Post;
-import com.sunkyuj.douner.security.JwtService;
 import com.sunkyuj.douner.user.UserRepository;
 import com.sunkyuj.douner.user.model.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketSession;
 
-import java.io.IOException;
 import java.util.Date;
 
 // Service: Create, Update, Delete 의 로직 처리
@@ -27,7 +21,6 @@ public class ChatService {
     private final ChatRepository chatRepository;
     private final UserRepository userRepository;
     private final PostRepository postRepository;
-//    private final ChatProvider chatProvider;
 
 
     @Transactional
@@ -45,22 +38,22 @@ public class ChatService {
     }
 
     @Transactional
-    public ChatContentResponse postChatContent(Long chatRoomId, ChatContentRequest chatContentRequest) {
+    public ChatMessageResponse postChatContent(Long chatRoomId, ChatMessageRequest chatContentRequest) {
         User user = userRepository.findOne(chatContentRequest.getUserId());
         ChatRoom chatRoom = chatRepository.findOneChatRoom (chatRoomId);
-        ChatContent chatContent = ChatContent.builder()
+        ChatMessage chatContent = ChatMessage.builder()
                 .user(user)
                 .chatRoom(chatRoom)
-                .content(chatContentRequest.getContent())
+                .message(chatContentRequest.getMessage())
                 .created(new Date())
                 .build();
 
         Long chatContentId = chatRepository.createChatContent(chatContent);
-        return ChatContentResponse.builder()
+        return ChatMessageResponse.builder()
                 .chatContentId(chatContentId)
                 .chatRoomId(chatRoom.getId())
                 .userId(user.getId())
-                .content(chatContent.getContent())
+                .message(chatContent.getMessage())
                 .created(chatContent.getCreated())
                 .build();
     }

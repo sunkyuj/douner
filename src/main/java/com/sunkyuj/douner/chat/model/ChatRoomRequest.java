@@ -5,5 +5,5 @@ import lombok.Setter;
 
 @Getter
 public class ChatRoomRequest {
-    private Long requesterId;
+    private Long postId;
 }

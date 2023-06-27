@@ -1,6 +1,5 @@
 package com.sunkyuj.douner.chat;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sunkyuj.douner.chat.model.*;
 import com.sunkyuj.douner.errors.CustomException;
 import com.sunkyuj.douner.errors.ErrorCode;
@@ -8,19 +7,15 @@ import com.sunkyuj.douner.post.PostService;
 import com.sunkyuj.douner.security.JwtService;
 import com.sunkyuj.douner.utils.ApiResult;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.websocket.ContainerProvider;
-import jakarta.websocket.WebSocketContainer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import com.sunkyuj.douner.utils.ApiUtils;
 
-import java.net.URI;
 import java.util.Date;
 import java.util.List;
 
@@ -40,7 +35,7 @@ public class ChatController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ChatRoomResponse.class))))
     })
-    @GetMapping("")
+    @GetMapping("/rooms")
     public ApiResult<List<ChatRoomResponse>> findAllChatRoom() throws Exception {
 
         //토큰 유효기간 파악
@@ -59,14 +54,14 @@ public class ChatController {
     }
 
     // 한 채팅방에서의 모든 채팅 받기
-    @Operation(summary = "채팅 컨텐츠 조회", description = "채팅방의 컨텐츠를 모두 조회한다", tags = { "Chat" })
+    @Operation(summary = "채팅방 메세지 조회", description = "채팅방의 컨텐츠를 모두 조회한다", tags = { "Chat" })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ChatContentResponse.class))))
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ChatMessageResponse.class))))
     })
-    @GetMapping("/{chatRoomId}")
-    public ApiResult<List<ChatContentResponse>> getAllChatContent(@PathVariable("chatRoomId") Long chatRoomId) throws Exception {
+    @GetMapping("/{chatRoomId}/messages")
+    public ApiResult<List<ChatMessageResponse>> getAllChatContent(@PathVariable("chatRoomId") Long chatRoomId) throws Exception {
         Long userId = jwtService.getUserId();
-        List<ChatContentResponse> chatContents = chatProvider.getAllChatContent(chatRoomId);
+        List<ChatMessageResponse> chatContents = chatProvider.getAllChatContent(chatRoomId);
         return ApiUtils.success(chatContents);
     }
 
@@ -76,8 +71,8 @@ public class ChatController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = ChatRoomResponse.class)))
     })
-    @PostMapping("/{postId}")
-    public ApiResult<ChatRoomResponse> createChatRoom(@PathVariable("postId") Long postId) throws Exception {
+    @PostMapping("")
+    public ApiResult<ChatRoomResponse> createChatRoom(@RequestBody ChatRoomRequest chatRoomRequest) throws Exception {
         //토큰 유효기간 파악
         try {
             Date current = new Date(System.currentTimeMillis());
@@ -87,9 +82,8 @@ public class ChatController {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
+        Long postId = chatRoomRequest.getPostId();
         Long volunteerId = jwtService.getUserId(); // 봉사자(봉사자가 채팅 시작)
-        Long requesterId = postService.findOne(postId).getUser().getId(); // 도움요청자(사회적약자)
         // TODO: 이미 만든 방이 있는지 체크
         ChatRoomResponse chatRoomResponse = chatService.createChatRoom(postId,volunteerId);
         // 채팅방 생성 후 자동으로 웹소켓 연결시키기
@@ -102,13 +96,13 @@ public class ChatController {
     // 채팅컨텐츠(메세지) 전송
     @Operation(summary = "채팅컨텐츠(메세지) 전송", description = "채팅컨텐츠(메세지)를 해당 채팅방에 전송한다", tags = { "Chat" })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = ChatContentResponse.class)))
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = ChatMessageResponse.class)))
     })
-    @PostMapping("/{chatRoomId}/content")
-    public ApiResult<ChatContentResponse> postChatContent(@PathVariable("chatRoomId") Long chatRoomId, @RequestBody ChatContentRequest chatContentRequest) {
+    @PostMapping("/{chatRoomId}/messages")
+    public ApiResult<ChatMessageResponse> postChatContent(@PathVariable("chatRoomId") Long chatRoomId, @RequestBody ChatMessageRequest chatContentRequest) {
         //토큰 유효기간 파악
 
-        ChatContentResponse chatContentResponse = chatService.postChatContent(chatRoomId,chatContentRequest);
+        ChatMessageResponse chatContentResponse = chatService.postChatContent(chatRoomId,chatContentRequest);
         return ApiUtils.success(chatContentResponse);
 
     }

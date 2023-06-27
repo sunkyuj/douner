@@ -1,7 +1,6 @@
 package com.sunkyuj.douner.chat;
 
-import com.sunkyuj.douner.chat.model.ChatContent;
-import com.sunkyuj.douner.chat.model.ChatContentRequest;
+import com.sunkyuj.douner.chat.model.ChatMessage;
 import com.sunkyuj.douner.chat.model.ChatRoom;
 import com.sunkyuj.douner.user.model.User;
 import jakarta.persistence.EntityManager;
@@ -23,8 +22,8 @@ public class ChatRepository {
     public ChatRoom findOneChatRoom(Long chatRoomId) {
         return em.find(ChatRoom.class,chatRoomId);
     }
-    public List<ChatContent> getAllChatContent(ChatRoom chatRoom) {
-        return em.createQuery("select cc from ChatContent cc where cc.chatRoom = :chatRoom", ChatContent.class)
+    public List<ChatMessage> getAllChatContent(ChatRoom chatRoom) {
+        return em.createQuery("select cc from ChatMessage cc where cc.chatRoom = :chatRoom", ChatMessage.class)
                 .setParameter("chatRoom", chatRoom)
                 .getResultList();
     }
@@ -33,7 +32,7 @@ public class ChatRepository {
         return chatRoom.getId();
     }
 
-    public Long createChatContent(ChatContent chatContent) {
+    public Long createChatContent(ChatMessage chatContent) {
         em.persist(chatContent);
         return chatContent.getId();
     }

@@ -1,17 +1,12 @@
 package com.sunkyuj.douner.chat.model;
 
-import com.sunkyuj.douner.chat.ChatProvider;
-import com.sunkyuj.douner.chat.ChatService;
 import com.sunkyuj.douner.user.model.User;
 import com.sunkyuj.douner.post.model.Post;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.web.socket.WebSocketSession;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -37,7 +32,7 @@ public class ChatRoom {
 
     @OneToMany(mappedBy = "chatRoom", // ChatContent의  chatRoom에 의해 매핑됨
             cascade = CascadeType.ALL) // 모든 경우에 CASCADE 해서 다 같이 묶여서 처리 (ALL, DELETE, UPDATE 등 있음)
-    private List<ChatContent> chatContents = new ArrayList<>();
+    private List<ChatMessage> messages = new ArrayList<>();
 
 
 }

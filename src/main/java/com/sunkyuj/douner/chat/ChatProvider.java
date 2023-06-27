@@ -1,8 +1,6 @@
 package com.sunkyuj.douner.chat;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sunkyuj.douner.chat.model.*;
-import com.sunkyuj.douner.security.JwtService;
 import com.sunkyuj.douner.user.UserRepository;
 
 import com.sunkyuj.douner.user.model.User;
@@ -10,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketSession;
 
-import java.io.IOException;
 import java.util.*;
 
 //Provider : 비즈니스 로직 처리
@@ -41,13 +36,13 @@ public class ChatProvider {
         return chatRoomResponseList;
     }
 
-    public List<ChatContentResponse> getAllChatContent(Long chatRoomId) {
+    public List<ChatMessageResponse> getAllChatContent(Long chatRoomId) {
         ChatRoom chatRoom = chatRepository.findOneChatRoom(chatRoomId);
-        List<ChatContent> chatContents = chatRepository.getAllChatContent(chatRoom);//getUser(userIdx)를 반환받아서 반환한다.
-        List<ChatContentResponse> chatContentResponseList = new ArrayList<>();
+        List<ChatMessage> chatContents = chatRepository.getAllChatContent(chatRoom);//getUser(userIdx)를 반환받아서 반환한다.
+        List<ChatMessageResponse> chatContentResponseList = new ArrayList<>();
 
-        for (ChatContent chatContent : chatContents) {
-            ChatContentResponse chatContentResponse = ChatContentResponse.builder()
+        for (ChatMessage chatContent : chatContents) {
+            ChatMessageResponse chatContentResponse = ChatMessageResponse.builder()
                     .chatContentId(chatContent.getId())
                     .build();
             chatContentResponseList.add(chatContentResponse);
