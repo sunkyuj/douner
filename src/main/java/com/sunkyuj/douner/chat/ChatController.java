@@ -27,8 +27,6 @@ public class ChatController {
     private final ChatProvider chatProvider;
     private final JwtService jwtService;
 
-    private final PostService postService;
-
 
     // 한 유저의 채팅방 목록 받기
     @Operation(summary = "채팅방 목록 조회", description = "사용자의 채팅방 목록을 조회한다", tags = { "Chat" })
@@ -59,10 +57,10 @@ public class ChatController {
             @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ChatMessageResponse.class))))
     })
     @GetMapping("/{chatRoomId}/messages")
-    public ApiResult<List<ChatMessageResponse>> getAllChatContent(@PathVariable("chatRoomId") Long chatRoomId) throws Exception {
+    public ApiResult<List<ChatMessageResponse>> getAllChatMessage(@PathVariable("chatRoomId") Long chatRoomId) throws Exception {
         Long userId = jwtService.getUserId();
-        List<ChatMessageResponse> chatContents = chatProvider.getAllChatContent(chatRoomId);
-        return ApiUtils.success(chatContents);
+        List<ChatMessageResponse> chatMessages = chatProvider.getAllChatMessage(chatRoomId);
+        return ApiUtils.success(chatMessages);
     }
 
     // 채팅방 생성
@@ -99,11 +97,11 @@ public class ChatController {
             @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = ChatMessageResponse.class)))
     })
     @PostMapping("/{chatRoomId}/messages")
-    public ApiResult<ChatMessageResponse> postChatContent(@PathVariable("chatRoomId") Long chatRoomId, @RequestBody ChatMessageRequest chatContentRequest) {
+    public ApiResult<ChatMessageResponse> postChatMessage(@PathVariable("chatRoomId") Long chatRoomId, @RequestBody ChatMessageRequest chatMessageRequest) {
         //토큰 유효기간 파악
 
-        ChatMessageResponse chatContentResponse = chatService.postChatContent(chatRoomId,chatContentRequest);
-        return ApiUtils.success(chatContentResponse);
+        ChatMessageResponse chatMessageResponse = chatService.postChatMessage(chatRoomId,chatMessageRequest);
+        return ApiUtils.success(chatMessageResponse);
 
     }
 }

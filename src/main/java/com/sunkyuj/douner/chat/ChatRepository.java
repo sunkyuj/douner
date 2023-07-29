@@ -22,8 +22,8 @@ public class ChatRepository {
     public ChatRoom findOneChatRoom(Long chatRoomId) {
         return em.find(ChatRoom.class,chatRoomId);
     }
-    public List<ChatMessage> getAllChatContent(ChatRoom chatRoom) {
-        return em.createQuery("select cc from ChatMessage cc where cc.chatRoom = :chatRoom", ChatMessage.class)
+    public List<ChatMessage> getAllChatMessage(ChatRoom chatRoom) {
+        return em.createQuery("select cm from ChatMessage cm where cm.chatRoom = :chatRoom", ChatMessage.class)
                 .setParameter("chatRoom", chatRoom)
                 .getResultList();
     }
@@ -32,8 +32,8 @@ public class ChatRepository {
         return chatRoom.getId();
     }
 
-    public Long createChatContent(ChatMessage chatContent) {
-        em.persist(chatContent);
-        return chatContent.getId();
+    public Long createChatMessage(ChatMessage chatMessage) {
+        em.persist(chatMessage);
+        return chatMessage.getId();
     }
 }

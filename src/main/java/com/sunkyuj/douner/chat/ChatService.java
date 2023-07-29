@@ -38,23 +38,23 @@ public class ChatService {
     }
 
     @Transactional
-    public ChatMessageResponse postChatContent(Long chatRoomId, ChatMessageRequest chatContentRequest) {
-        User user = userRepository.findOne(chatContentRequest.getUserId());
+    public ChatMessageResponse postChatMessage(Long chatRoomId, ChatMessageRequest chatMessageRequest) {
+        User user = userRepository.findOne(chatMessageRequest.getUserId());
         ChatRoom chatRoom = chatRepository.findOneChatRoom (chatRoomId);
-        ChatMessage chatContent = ChatMessage.builder()
+        ChatMessage chatMessage = ChatMessage.builder()
                 .user(user)
                 .chatRoom(chatRoom)
-                .message(chatContentRequest.getMessage())
+                .message(chatMessageRequest.getMessage())
                 .created(new Date())
                 .build();
 
-        Long chatContentId = chatRepository.createChatContent(chatContent);
+        Long chatMessageId = chatRepository.createChatMessage(chatMessage);
         return ChatMessageResponse.builder()
-                .chatContentId(chatContentId)
+                .chatMessageId(chatMessageId)
                 .chatRoomId(chatRoom.getId())
                 .userId(user.getId())
-                .message(chatContent.getMessage())
-                .created(chatContent.getCreated())
+                .message(chatMessage.getMessage())
+                .created(chatMessage.getCreated())
                 .build();
     }
 }

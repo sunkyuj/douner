@@ -36,18 +36,22 @@ public class ChatProvider {
         return chatRoomResponseList;
     }
 
-    public List<ChatMessageResponse> getAllChatContent(Long chatRoomId) {
+    public List<ChatMessageResponse> getAllChatMessage(Long chatRoomId) {
         ChatRoom chatRoom = chatRepository.findOneChatRoom(chatRoomId);
-        List<ChatMessage> chatContents = chatRepository.getAllChatContent(chatRoom);//getUser(userIdx)를 반환받아서 반환한다.
-        List<ChatMessageResponse> chatContentResponseList = new ArrayList<>();
+        List<ChatMessage> chatMessages = chatRepository.getAllChatMessage(chatRoom);//getUser(userIdx)를 반환받아서 반환한다.
+        List<ChatMessageResponse> chatMessageResponseList = new ArrayList<>();
 
-        for (ChatMessage chatContent : chatContents) {
-            ChatMessageResponse chatContentResponse = ChatMessageResponse.builder()
-                    .chatContentId(chatContent.getId())
+        for (ChatMessage chatMessage : chatMessages) {
+            ChatMessageResponse chatMessageResponse = ChatMessageResponse.builder()
+                    .chatMessageId(chatMessage.getId())
+                    .chatRoomId(chatRoomId)
+                    .userId(chatMessage.getUser().getId())
+                    .message(chatMessage.getMessage())
+                    .created(chatMessage.getCreated())
                     .build();
-            chatContentResponseList.add(chatContentResponse);
+            chatMessageResponseList.add(chatMessageResponse);
         }
-        return chatContentResponseList;
+        return chatMessageResponseList;
     }
 }
 

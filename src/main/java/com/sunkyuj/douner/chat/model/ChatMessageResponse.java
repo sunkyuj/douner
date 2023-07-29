@@ -10,7 +10,7 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 public class ChatMessageResponse {
-    private Long chatContentId;
+    private Long chatMessageId;
     private Long chatRoomId;
     private Long userId;
     private String message;

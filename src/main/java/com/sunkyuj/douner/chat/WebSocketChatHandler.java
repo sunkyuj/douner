@@ -50,11 +50,11 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
         String payload = message.getPayload();
         log.info("payload {}", payload);
 
-        // 페이로드 -> chatContentDto로 변환
-        ChatMessageDto chatContentDto = mapper.readValue(payload, ChatMessageDto.class);
-        log.info("session {}", chatContentDto.toString());
+        // 페이로드 -> chatMessageDto로 변환
+        ChatMessageDto chatMessageDto = mapper.readValue(payload, ChatMessageDto.class);
+        log.info("session {}", chatMessageDto.toString());
 
-        Long chatRoomId = chatContentDto.getChatRoomId();
+        Long chatRoomId = chatMessageDto.getChatRoomId();
         // 메모리 상에 채팅방에 대한 세션 없으면 만들어줌
         if(!chatRoomSessionMap.containsKey(chatRoomId)){
             chatRoomSessionMap.put(chatRoomId,new HashSet<>());
@@ -64,14 +64,14 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
         // message 에 담긴 타입을 확인한다.
         // 이때 message 에서 getType 으로 가져온 내용이
         // ChatDTO 의 열거형인 MessageType 안에 있는 ENTER 과 동일한 값이라면
-        if (chatContentDto.getMessageType().equals(ChatMessageDto.MessageType.ENTER)) {
+        if (chatMessageDto.getMessageType().equals(ChatMessageDto.MessageType.ENTER)) {
             // sessions 에 넘어온 session 을 담고,
             chatRoomSession.add(session);
         }
         if (chatRoomSession.size()>=3) {
             removeClosedSession(chatRoomSession);
         }
-        sendMessageToChatRoom(chatContentDto, chatRoomSession);
+        sendMessageToChatRoom(chatMessageDto, chatRoomSession);
 
     }
 
@@ -89,11 +89,11 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
     }
 
     private void sendMessageToChatRoom(ChatMessageDto chatContentDto, Set<WebSocketSession> chatRoomSession) {
-        chatRoomSession.parallelStream().forEach(sess -> sendMessageEach(sess, chatContentDto));//2
+        chatRoomSession.parallelStream().forEach(sess -> sendMessage(sess, chatContentDto));//2
     }
 
 
-    public <T> void sendMessageEach(WebSocketSession session, T message) {
+    public <T> void sendMessage(WebSocketSession session, T message) {
         try{
             session.sendMessage(new TextMessage(mapper.writeValueAsString(message)));
         } catch (IOException e) {

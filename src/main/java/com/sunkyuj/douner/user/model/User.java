@@ -13,7 +13,6 @@ import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE) // 싱글테이블은 한 테이블에 다 때려박기
-@DiscriminatorColumn(name = "dtype")
 @Getter @Setter
 @Builder
 @ToString
