@@ -85,3 +85,8 @@ jobs:
         --file-exists-behavior OVERWRITE \
         --s3-location bucket=douner-deploy,bundleType=zip,key=douner.zip \
         --region ap-northeast-2
+    
+    # run shell
+    - name: Run shell scrpit
+      run: ./scripts/deploy.sh
+      shell: bash
