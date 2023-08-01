@@ -7,9 +7,12 @@ on:
     branches: [ main ]
 
 env:
-  S3_BUCKET_NAME: cointalk-deploy
+  S3_BUCKET_NAME: douner-deploy
   JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
   TOKEN_HEADER_PREFIX: ${{ secrets.TOKEN_HEADER_PREFIX }}
+  DB_URL: ${{ secrets.DB_URL }}
+  DB_USERNAME: ${{ secrets.DB_USERNAME }}
+  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
 jobs:
   build:
@@ -25,8 +28,62 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         
+    - name: Setup MySQL
+      uses: samin/mysql-action@v1
+      with:
+        character set server: 'utf8'
+        mysql database: "${DB_URL}"
+        mysql user: "${DB_USERNAME}"
+        mysql password: "${DB_PASSWORD}"
+        
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     
     - name: Build with Gradle
-      run: ./gradlew clean build -P JWT_SECRET_KEY="${JWT_SECRET_KEY}" -P TOKEN_HEADER_PREFIX="${TOKEN_HEADER_PREFIX}"
+      run: ./gradlew clean build 
+      
+    # 디렉토리 생성
+    - name: Make Directory
+      run: mkdir -p deploy
+        
+    # Jar 파일 복사
+    - name: Copy Jar
+      run: cp ./build/libs/*.jar ./deploy
+
+    # appspec.yml 파일 복사
+    - name: Copy appspec.yml
+      run: cp appspec.yml ./deploy
+
+
+    # script files 복사
+    - name: Copy script
+      run: cp ./scripts/*.sh ./deploy
+
+    - name: Make zip file
+      run: zip -r ./douner.zip ./deploy
+      shell: bash
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-northeast-2
+
+    - name: Upload to S3
+      run: aws s3 cp --region ap-northeast-2 ./douner.zip s3://$S3_BUCKET_NAME/
+
+
+
+    # Deploy
+    - name: Deploy
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      run: |
+        aws deploy create-deployment \
+        --application-name douner[만든 애플리케이션 이름] \
+        --deployment-group-name douner-group[만든 애플리케이션 그룹 이름] \
+        --file-exists-behavior OVERWRITE \
+        --s3-location bucket=douner-deploy[S3버킷이름],bundleType=zip,key=douner.zip[S3버킷 속 압축파일] \ 
+        --region ap-northeast-2
