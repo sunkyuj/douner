@@ -5,12 +5,13 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import static com.sunkyuj.douner.SecurityConstants.JWT_SECRET_KEY;
-import static com.sunkyuj.douner.SecurityConstants.TOKEN_HEADER_PREFIX;
+//import static com.sunkyuj.douner.SecurityConstants.JWT_SECRET_KEY;
+//import static com.sunkyuj.douner.SecurityConstants.TOKEN_HEADER_PREFIX;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -20,6 +21,11 @@ import java.util.Date;
 public class JwtService {
 
     private final JwtProvider jwtProvider;
+
+    @Value("${jwt.jwt-secret-key}")
+    private String JWT_SECRET_KEY;
+    @Value("${jwt.token-header-prefix}")
+    private String TOKEN_HEADER_PREFIX;
 
     final String INVALID_JWT = "유효하지 않은 토큰입니다.";
     final String EMPTY_JWT = "토큰이 비어있습니다.";

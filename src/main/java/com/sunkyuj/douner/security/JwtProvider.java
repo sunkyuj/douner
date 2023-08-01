@@ -11,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,7 +28,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Stream;
 
-import static com.sunkyuj.douner.SecurityConstants.JWT_SECRET_KEY;
+//import static com.sunkyuj.douner.SecurityConstants.JWT_SECRET_KEY;
+
 
 
 @RequiredArgsConstructor
@@ -33,13 +37,13 @@ import static com.sunkyuj.douner.SecurityConstants.JWT_SECRET_KEY;
 @Component
 public class JwtProvider {
 
+
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24; // 1일
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7; // 7일
-    private static final String jwtKey = JWT_SECRET_KEY;
+    @Value("${jwt.jwt-secret-key}")
+    private String JWT_SECRET_KEY/* = JWT_SECRET_KEY*/;
 
 
-//    @Value("${jwt.token.secret}")
-//    private String secretkey;   // application.yml에서 설정한 token 키의 값을 저장함
 
     // 요청 헤더에서 액세스 토큰 가져오기
     public String getAccessTokenFromRequest(HttpServletRequest request) {
@@ -79,7 +83,7 @@ public class JwtProvider {
 
     // HMAC-SHA 알고리즘에 쓰기 위해 JWT_SECRET_KEY로 시크릿키 생성
     private Key getSignInKey() {
-        byte[] byteKey = JwtProvider.jwtKey.getBytes(StandardCharsets.UTF_8);
+        byte[] byteKey = /*JwtProvider.*/JWT_SECRET_KEY.getBytes(StandardCharsets.UTF_8);
         return Keys.hmacShaKeyFor(byteKey);
     }
 

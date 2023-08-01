@@ -8,12 +8,12 @@ import io.jsonwebtoken.Jwts;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Date;
 
-import static com.sunkyuj.douner.SecurityConstants.JWT_SECRET_KEY;
-import static com.sunkyuj.douner.SecurityConstants.TOKEN_HEADER_PREFIX;
+//import static com.sunkyuj.douner.SecurityConstants.TOKEN_HEADER_PREFIX;
 
 @SpringBootTest
 public class JwtProviderTest {
@@ -22,6 +22,11 @@ public class JwtProviderTest {
     JwtProvider jwtProvider;
     @Autowired
     JwtService jwtService;
+
+    @Value("${jwt.jwt-secret-key}")
+    private String jwtKey;
+    @Value("${jwt.token-header-prefix}")
+    private String prefix;
 
     @Test
     public void 토큰생성() throws Exception{
@@ -36,14 +41,14 @@ public class JwtProviderTest {
         LoginToken token = jwtService.createToken(userId);
 
         String accessToken = token.getAccessToken();
-        accessToken = accessToken.replace(TOKEN_HEADER_PREFIX,"");
+        accessToken = accessToken.replace(prefix,"");
         System.out.println("accessToken = " + accessToken);
 
         // 2. JWT parsing
         Claims claims;
         try{
             claims = Jwts.parserBuilder()
-                    .setSigningKey(JWT_SECRET_KEY.getBytes())
+                    .setSigningKey(jwtKey.getBytes())
                     .build()
                     .parseClaimsJws(accessToken)
                     .getBody();
