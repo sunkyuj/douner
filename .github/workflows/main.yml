@@ -8,6 +8,8 @@ on:
 
 env:
   S3_BUCKET_NAME: cointalk-deploy
+  JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+  TOKEN_HEADER_PREFIX: ${{ secrets.TOKEN_HEADER_PREFIX }}
 
 jobs:
   build:
@@ -27,4 +29,4 @@ jobs:
       run: chmod +x gradlew
     
     - name: Build with Gradle
-      run: ./gradlew clean build
+      run: ./gradlew clean build -P JWT_SECRET_KEY="${JWT_SECRET_KEY}" -P TOKEN_HEADER_PREFIX="${TOKEN_HEADER_PREFIX}"
