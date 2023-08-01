@@ -10,6 +10,9 @@ env:
   S3_BUCKET_NAME: cointalk-deploy
   JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
   TOKEN_HEADER_PREFIX: ${{ secrets.TOKEN_HEADER_PREFIX }}
+  DB_URL: ${{ secrets.DB_URL }}
+  DB_USERNAME: ${{ secrets.DB_USERNAME }}
+  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
 jobs:
   build:
@@ -24,6 +27,14 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
+        
+    - name: Setup MySQL
+      uses: samin/mysql-action@v1
+      with:
+        character set server: 'utf8'
+        mysql database: '데이터베이스 이름'
+        mysql user: '사용자 이름'
+        mysql password: '데이터베이스 비밀번호'
         
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
