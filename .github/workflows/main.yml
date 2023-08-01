@@ -82,7 +82,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
         aws deploy create-deployment \
-        --application-name douner\
+        --application-name douner \
         --deployment-group-name douner-group \
         --file-exists-behavior OVERWRITE \
         --s3-location bucket=douner-deploy,bundleType=zip,key=douner.zip \ 
