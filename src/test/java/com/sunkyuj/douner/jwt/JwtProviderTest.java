@@ -24,9 +24,9 @@ public class JwtProviderTest {
     JwtService jwtService;
 
     @Value("${jwt.jwt-secret-key}")
-    private String jwtKey;
+    private String JWT_SECRET_KEY;
     @Value("${jwt.token-header-prefix}")
-    private String prefix;
+    private String TOKEN_HEADER_PREFIX;
 
     @Test
     public void 토큰생성() throws Exception{
@@ -41,14 +41,14 @@ public class JwtProviderTest {
         LoginToken token = jwtService.createToken(userId);
 
         String accessToken = token.getAccessToken();
-        accessToken = accessToken.replace(prefix,"");
+        accessToken = accessToken.replace(TOKEN_HEADER_PREFIX,"");
         System.out.println("accessToken = " + accessToken);
 
         // 2. JWT parsing
         Claims claims;
         try{
             claims = Jwts.parserBuilder()
-                    .setSigningKey(jwtKey.getBytes())
+                    .setSigningKey(JWT_SECRET_KEY.getBytes())
                     .build()
                     .parseClaimsJws(accessToken)
                     .getBody();
