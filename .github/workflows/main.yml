@@ -1,4 +1,4 @@
-name: coinTalk chatRoom server CI/CD
+name: Douner server CI/CD
 
 on:
   push:
@@ -82,8 +82,8 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
         aws deploy create-deployment \
-        --application-name douner[만든 애플리케이션 이름] \
-        --deployment-group-name douner-group[만든 애플리케이션 그룹 이름] \
+        --application-name douner\
+        --deployment-group-name douner-group \
         --file-exists-behavior OVERWRITE \
-        --s3-location bucket=douner-deploy[S3버킷이름],bundleType=zip,key=douner.zip[S3버킷 속 압축파일] \ 
+        --s3-location bucket=douner-deploy,bundleType=zip,key=douner.zip \ 
         --region ap-northeast-2
