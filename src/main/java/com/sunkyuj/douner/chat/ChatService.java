@@ -25,7 +25,12 @@ public class ChatService {
 
     @Transactional
     public ChatRoomResponse createChatRoom(Long postId, Long volunteerId) {
+
         Post post = postRepository.findOne(postId);
+        if(post==null){
+            log.error("해당 게시글이 존재하지 않습니다.");
+            throw new IllegalArgumentException("해당 게시글이 존재하지 않습니다.");
+        }
         User requester = post.getUser();
         User volunteer = userRepository.findOne(volunteerId);
         ChatRoom chatRoom = ChatRoom.builder()

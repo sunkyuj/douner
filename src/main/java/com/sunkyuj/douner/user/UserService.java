@@ -116,7 +116,7 @@ public class UserService {
         userRepository.save(user);
         return new UserRegisterResponse(user.getId(), user.getName(), user.getEmail(), user.getUserType());
     }
-
+/**/
 //    public String login(UserLoginRequest userLoginRequest) {
 //        // 유저 존재 여부 확인
 //        List<User> findUsers =userRepository.findByEmail(userLoginRequest.getEmail());
