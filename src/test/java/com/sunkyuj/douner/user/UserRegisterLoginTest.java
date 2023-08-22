@@ -72,7 +72,6 @@ class UserRegisterLoginTest {
         UserRegisterRequest userRegisterRequest = new UserRegisterRequest(
                 "testUser2","password","test2@test.com",UserType.REQUESTER);
         UserRegisterResponse userRegisterResponse = userService.register(userRegisterRequest);
-
         UserLoginRequest userLoginRequest = new UserLoginRequest(
                 "test2@test.com","password",UserType.REQUESTER);
 
@@ -80,6 +79,9 @@ class UserRegisterLoginTest {
         UserLoginResultToken result = userService.login(userLoginRequest);
 
         //then
+        System.out.println("userRegisterResponse.getUserId() = " + userRegisterResponse.getUserId());
+        System.out.println("result.getUserId() = " + result.getUserId());
+
         assertEquals(userRegisterResponse.getUserId(),result.getUserId());
     }
 }
