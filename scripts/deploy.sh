@@ -18,6 +18,8 @@ fi
 
 echo "> 새 애플리케이션 배포"
 
+source ~/.bashrc
+
 JAR_NAME=$(ls -tr $REPOSITORY/*SNAPSHOT.jar | tail -n 1)
 
 #JAR_NAME="/home/ubuntu/app/douner-0.0.1-SNAPSHOT.jar"
