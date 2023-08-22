@@ -92,5 +92,5 @@ jobs:
     
     # run shell
     - name: Run shell scrpit
-      run: ./scripts/deploy.sh
+      run: bash ./scripts/deploy.sh
       shell: bash
