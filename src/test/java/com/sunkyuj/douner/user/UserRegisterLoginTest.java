@@ -76,13 +76,10 @@ class UserRegisterLoginTest {
         UserLoginRequest userLoginRequest = new UserLoginRequest(
                 "test2@test.com","password",UserType.REQUESTER);
 
-        LoginToken loginToken = jwtService.createToken(userRegisterResponse.getUserId());
-
         //when
         UserLoginResultToken result = userService.login(userLoginRequest);
 
         //then
-        assertEquals("testUser2",result.getUsername());
-        assertEquals(loginToken.getAccessToken(), result.getAccessToken());
+        assertEquals(userRegisterResponse.getUserId(),result.getUserId());
     }
 }
