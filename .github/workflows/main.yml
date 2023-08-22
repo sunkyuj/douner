@@ -15,7 +15,7 @@ env:
   DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
 jobs:
-  build:
+  deploy:
 
     runs-on: ubuntu-latest
 
@@ -40,8 +40,8 @@ jobs:
       run: chmod +x gradlew
     
     - name: Build with Gradle
-      run: ./gradlew clean build 
-      
+      run: ./gradlew clean build
+
     # 디렉토리 생성
     - name: Make Directory
       run: mkdir -p deploy
@@ -86,11 +86,11 @@ jobs:
         --s3-location bucket=douner-deploy,bundleType=zip,key=douner.zip \
         --region ap-northeast-2
         
-    # script file 권한 부여
-    - name: chmod script
-      run: chmod 755 ./scripts/deploy.sh
+    # # script file 권한 부여
+    # - name: chmod script
+    #   run: chmod 755 ./scripts/deploy.sh
     
-    # run shell
-    - name: Run shell scrpit
-      run: bash ./scripts/deploy.sh
-      shell: bash
+    # # run shell
+    # - name: Run shell scrpit
+    #   run: bash ./scripts/deploy.sh
+    #   shell: bash
